@@ -1,9 +1,15 @@
 import os,png,array
+import csv
+import numpy as np
 import pandas as pd
-os.chdir('zero/')
+
 import time
 
 from PIL import Image
+
+
+os.chdir('zero/')
+
 columnNames = list()
 
 for i in range(784):
@@ -14,7 +20,7 @@ for i in range(784):
 
 train_data = pd.DataFrame(columns = columnNames)
 start_time = time.time()
-for i in range(1,6):
+for i in range(1,8):
     t = i
     img_name = str(t)+'.png'
     img = Image.open(img_name)
@@ -32,16 +38,21 @@ for i in range(1,6):
 
 print ("Done")
 print  (time.time()-start_time)
-
-#os.chdir('../../')
-#label_data = pd.read_csv("train.csv")
-#print label_data
-#train_labels = label_data['label']
-#print label_data['label']
-#train_data = pd.concat([train_data,label_data],axis = 1)
-#train_data = train_data.drop('filename',1)
 print (train_data)
 
 train_data.to_csv("train_converted.csv",index = False)
 print ("Done1")
 print  (time.time()-start_time)
+
+
+
+
+data = pd.read_csv("train_converted.csv")
+
+labels = ['0' for i in range(7)]
+
+data.insert(0, "label", labels)
+
+data.to_csv("output.csv",index = False)
+
+os.remove('train_converted.csv')
